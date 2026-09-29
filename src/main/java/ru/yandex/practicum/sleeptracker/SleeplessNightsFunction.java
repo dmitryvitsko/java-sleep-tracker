@@ -11,13 +11,16 @@ public class SleeplessNightsFunction implements Function<List<SleepingSession>, 
     @Override
     public SleepAnalysisResult apply(List<SleepingSession> sleepingSessions) {
         if (sleepingSessions.isEmpty()) {
-            return new SleepAnalysisResult("Количество бессонных ночей", 0);
+            return new SleepAnalysisResult("Количество бессонных ночей", 0L);
         }
+
         LocalDateTime firstSession = sleepingSessions.get(0).getTimeToFallAsleep();
-        LocalDate lastNightDate = sleepingSessions.get(sleepingSessions.size() - 1).getWakeUpTime().toLocalDate().plusDays(1);
+        LocalDate lastNightDate = sleepingSessions.get(sleepingSessions.size() - 1)
+                .getWakeUpTime()
+                .toLocalDate()
+                .plusDays(1);
 
         LocalDate firstNightDate;
-
         if (firstSession.getHour() < 12) {
             firstNightDate = firstSession.toLocalDate();
         } else {
@@ -26,6 +29,16 @@ public class SleeplessNightsFunction implements Function<List<SleepingSession>, 
 
         int totalNights = Period.between(firstNightDate, lastNightDate).getDays();
 
+        long numberSleepingNights = sleepingSessions.stream()
+                .filter(session -> !session.getWakeUpTime().toLocalDate()
+                        .equals(session.getTimeToFallAsleep().toLocalDate())
+                        || session.getTimeToFallAsleep().getHour() < 6)
+                .map(session -> session.getWakeUpTime().toLocalDate())
+                .distinct()
+                .count();
 
+        long sleeplessNights = totalNights - numberSleepingNights;
+
+        return new SleepAnalysisResult("Количество бессонных ночей", sleeplessNights);
     }
 }
