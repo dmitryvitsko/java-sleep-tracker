@@ -17,7 +17,8 @@ public class SleepTrackerApp {
             new MaxDurationFunction(),
             new AverageDurationFunction(),
             new BadQualitySessionsFunction(),
-            new SleeplessNightsFunction()
+            new SleeplessNightsFunction(),
+            new ChronotypeFunction()
     );
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
