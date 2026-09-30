@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
 import java.util.function.Function;
+import java.time.temporal.ChronoUnit;
 
 public class SleeplessNightsFunction implements Function<List<SleepingSession>, SleepAnalysisResult> {
 
@@ -27,7 +28,7 @@ public class SleeplessNightsFunction implements Function<List<SleepingSession>, 
             firstNightDate = firstSession.toLocalDate().plusDays(1);
         }
 
-        int totalNights = Period.between(firstNightDate, lastNightDate).getDays();
+        long totalNights = ChronoUnit.DAYS.between(firstNightDate, lastNightDate);
 
         long numberSleepingNights = sleepingSessions.stream()
                 .filter(session -> !session.getWakeUpTime().toLocalDate()

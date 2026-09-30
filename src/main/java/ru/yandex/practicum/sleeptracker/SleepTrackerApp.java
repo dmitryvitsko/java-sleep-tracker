@@ -35,6 +35,11 @@ public class SleepTrackerApp {
 
 
     public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Ошибка: укажите путь к файлу с логами первым аргументом");
+            return;
+        }
+
         try (Stream<String> lines = Files.lines(Paths.get(args[0]))) {
             listOfSleepSessions = lines.map(SleepTrackerApp::parseLine)
                     .toList();

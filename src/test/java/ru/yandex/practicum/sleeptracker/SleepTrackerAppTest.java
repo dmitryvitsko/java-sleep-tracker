@@ -158,4 +158,16 @@ public class SleepTrackerAppTest {
         Assertions.assertEquals(120L, averageDurationFunction.apply(sessions).getFunctionResult());
         Assertions.assertEquals(1L, badQualitySessionsFunction.apply(sessions).getFunctionResult());
     }
+
+    @Test
+    public void testSleeplessNightsPeriodBugWithReviewerDates() {
+        SleeplessNightsFunction function = new SleeplessNightsFunction();
+        List<SleepingSession> sessions = List.of(
+                createSession("01.10.25 23:00", "02.10.25 07:00", SleepQuality.GOOD),
+                createSession("02.11.25 23:00", "03.11.25 07:00", SleepQuality.GOOD)
+        );
+
+        SleepAnalysisResult result = function.apply(sessions);
+        Assertions.assertEquals(31L, result.getFunctionResult());
+    }
 }
